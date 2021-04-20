@@ -1,0 +1,83 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <div fxLayout="column" fxLayoutGap="25px" class="container-options">
+      <div fxLayout="column">
+        <mat-label align="center">Filtrar por precio</mat-label>
+
+        <mat-slider
+          thumbLabel
+          [displayWith]="formatLabel"
+          tickInterval="1000"
+          min="1"
+          max="100000"
+        ></mat-slider>
+
+        <button mat-raised-button>Filtrar</button>
+      </div>
+      <mat-divider></mat-divider>
+
+      <div fxLayout="column">
+        <mat-label align="center">Buscar por nombre</mat-label>
+        <mat-form-field>
+          <mat-label>camiseta roja...</mat-label>
+          <input matInput #inputName/>
+        </mat-form-field>
+
+        <button mat-raised-button (click)="filterName(inputName.value)">Buscar</button>
+      </div>
+      <mat-divider></mat-divider>
+
+      <div fxLayout="column">
+        <mat-label align="center">Buscar por categorías</mat-label>
+
+        <mat-selection-list #shoes>
+          <mat-list-option *ngFor="let shoe of typesOfShoes">
+            {{ shoe }}
+          </mat-list-option>
+        </mat-selection-list>
+
+        <p align="center">
+          Categorías seleccionadas: {{ shoes.selectedOptions.selected.length }}
+        </p>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+
+      <span fxFlex>subastapp</span>
+
+      <nav mat-tab-nav-bar mat-align-tabs="end" class="animated fadeIn fast">
+        <a
+          mat-tab-link
+          *ngFor="let link of navLinks"
+          [routerLink]="link.link"
+          routerLinkActive
+          #rla="routerLinkActive"
+          [active]="rla.isActive"
+        >
+          {{ link.label }}
+        </a>
+      </nav>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <app-products></app-products>
+  </mat-sidenav-content>
+</mat-sidenav-container>
