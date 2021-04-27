@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SingletonFilter } from '../models/SingletonFilter';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GlobalService {
 
-  public filterElementNames: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  public filterElementPrice: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  public filterElementCategories: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>([]);
+  public singletonFilter: BehaviorSubject<SingletonFilter> = new BehaviorSubject<SingletonFilter>(null);
 
   constructor() { }
 }

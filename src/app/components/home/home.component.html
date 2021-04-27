@@ -14,23 +14,33 @@
         <mat-slider
           thumbLabel
           [displayWith]="formatLabel"
-          tickInterval="1000"
+          tickInterval="10000"
           min="1"
-          max="100000"
+          max="1000000"
+          (change)="getValueSlider($event)"
         ></mat-slider>
-
-        <button mat-raised-button>Filtrar</button>
       </div>
       <mat-divider></mat-divider>
 
       <div fxLayout="column">
         <mat-label align="center">Buscar por nombre</mat-label>
         <mat-form-field>
-          <mat-label>camiseta roja...</mat-label>
-          <input matInput #inputName/>
+          <input matInput #inputName placeholder="Nombre del producto" />
+          <button
+            mat-button
+            *ngIf="inputName.value"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="[inputName.value = '', filterName('')]"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
         </mat-form-field>
 
-        <button mat-raised-button (click)="filterName(inputName.value)">Buscar</button>
+        <button mat-raised-button (click)="filterName(inputName.value)">
+          Buscar
+        </button>
       </div>
       <mat-divider></mat-divider>
 

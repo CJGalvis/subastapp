@@ -5,6 +5,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { LinkNavigation } from 'src/app/models/LinkNavigation';
 import { Router } from '@angular/router';
 import { GlobalService } from 'src/app/services/global.service';
+import { MatSliderChange } from '@angular/material/slider';
 
 @Component({
   selector: 'app-home',
@@ -59,7 +60,17 @@ export class HomeComponent {
   }
 
   filterName(value: string) {
-    this.globalService.filterElementNames.next(value);
+    this.globalService.singletonFilter.next({
+      ...this.globalService.singletonFilter.value,
+      name: value,
+    })
+  }
+
+  getValueSlider(event: MatSliderChange) {
+    this.globalService.singletonFilter.next({
+      ...this.globalService.singletonFilter.value,
+      price: event.value,
+    })
   }
 
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSelectChange } from '@angular/material/select';
 import { GlobalService } from 'src/app/services/global.service';
+import { data } from 'src/app/common/data';
+import { SingletonFilter } from 'src/app/models/SingletonFilter';
 
 @Component({
   selector: 'app-products',
@@ -13,96 +14,12 @@ export class ProductsComponent implements OnInit {
   public pageSize: number = 5;
   public pageSizeOptions: Array<number> = [5, 10, 25, 100];
   private currentOrder: number;
-
   public foods: any[] = [
     { value: 0, viewValue: 'Nombre' },
     { value: 1, viewValue: 'Categoría' },
     { value: 2, viewValue: 'Usuario' }
   ];
-
-  public elementsList: Array<any> = [
-    {
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      title: 'Shiba Inu',
-      user: 'Dog Breed',
-      category: 1,
-      photos: [
-        'https://material.angular.io/assets/img/examples/shiba2.jpg'
-      ],
-      description: 'The Shiba Inu is the smallest of the six original and distinct spitz',
-    },
-    {
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      title: 'Camiseta nacional',
-      user: 'Luis Blanquicett',
-      category: 2,
-      photos: [
-        'https://material.angular.io/assets/img/examples/shiba2.jpg'
-      ],
-      description: 'The Shiba Inu is the smallest of the six original and distinct spitz',
-    },
-    {
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      title: 'Balon de baloncesto',
-      user: 'Maria Perez',
-      category: 3,
-      photos: [
-        'https://material.angular.io/assets/img/examples/shiba2.jpg'
-      ],
-      description: 'The Shiba Inu is the smallest of the six original and distinct spitz',
-    },
-    {
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      title: 'Camiseta de futbol',
-      user: 'Luis Blanquicett',
-      category: 2,
-      photos: [
-        'https://material.angular.io/assets/img/examples/shiba2.jpg'
-      ],
-      description: 'The Shiba Inu is the smallest of the six original and distinct spitz',
-    },
-    {
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      title: 'Camiseta de baloncesto',
-      user: 'Andres Perez',
-      category: 2,
-      photos: [
-        'https://material.angular.io/assets/img/examples/shiba2.jpg'
-      ],
-      description: 'The Shiba Inu is the smallest of the six original and distinct spitz',
-    },
-    {
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      title: 'Bicicleta MTB',
-      user: 'Hector Antonio',
-      category: 3,
-      photos: [
-        'https://material.angular.io/assets/img/examples/shiba2.jpg'
-      ],
-      description: 'The Shiba Inu is the smallest of the six original and distinct spitz',
-    },
-    {
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      title: 'Agua de matarraton',
-      user: 'Hector Antonio',
-      category: 3,
-      photos: [
-        'https://material.angular.io/assets/img/examples/shiba2.jpg'
-      ],
-      description: 'The Shiba Inu is the smallest of the six original and distinct spitz',
-    },
-    {
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      title: 'tennis buenos',
-      user: 'luis blanquicett',
-      category: 2,
-      photos: [
-        'https://material.angular.io/assets/img/examples/shiba2.jpg'
-      ],
-      description: 'The Shiba Inu is the smallest of the six original and distinct spitz',
-    },
-  ]
-
+  public elementsList: Array<any> = data;
   public elementsListView: Array<any>
 
   constructor(
@@ -112,7 +29,7 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getChangesFilterName();
+    this.getFiltersGlobals();
   }
 
   paginationElements(event?: { previousPageIndex: number, pageIndex: number, pageSize: number, length: number }) {
@@ -124,17 +41,33 @@ export class ProductsComponent implements OnInit {
     this.orderBy(this.currentOrder);
   }
 
-  getChangesFilterName() {
-    this.globalService.filterElementNames.subscribe(
-      (value: string) => {
-        this.elementsListView = this.elementsList.filter(item => item.title.toLowerCase().match(value.toLowerCase()));
-        this.orderBy(this.currentOrder);
+  getFiltersGlobals() {
+    this.globalService.singletonFilter.subscribe(
+      (filters: SingletonFilter) => {
+        if (filters?.price > 0) {
+          this.elementsListView = this.elementsList.filter(item => item.maxOffer.offer <= filters.price);
+        }
+
+        if (filters?.name?.length > 0) {
+          this.elementsListView = this.elementsList.filter(item => item.title.toLowerCase().match(filters.name.toLowerCase()));
+        }
+
+        if (filters?.orderBy > 0) {
+          this.orderBy(filters.orderBy);
+        }
+
+        if (!filters) {
+          this.elementsListView = this.elementsList;
+        }
       }
     )
   }
 
   orderBy(value: number) {
-    this.currentOrder = value;
+    this.globalService.singletonFilter.next({
+      ...this.globalService.singletonFilter.value,
+      orderBy: value
+    })
     switch (value) {
       case 0:
         this.orderByName();
