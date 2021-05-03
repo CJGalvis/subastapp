@@ -5,6 +5,16 @@
     </button>
 
     <span fxFlex>subastapp</span>
+
+    <div class="settings" fxLayout="row" fxLayoutAlign="space-around center">
+      <button type="button" matTooltip="Perfil" mat-icon-button matBadge="4">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <!-- <button type="button" matTooltip="Salir" mat-icon-button (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+      </button> -->
+    </div>
   </mat-toolbar>
 
   <div fxLayout="row" fxLayoutAlign="center" class="container">
@@ -16,13 +26,11 @@
             <img width="60%" [src]="profileCurrent.img" alt="´photo perfil" />
           </div>
 
-          <br>
+          <br />
           <!-- Participations -->
-          <div >
+          <div>
             <mat-chip-list>
-              <mat-chip
-                *ngFor="let item of profileCurrent.participations"
-              >
+              <mat-chip *ngFor="let item of profileCurrent.participations">
                 {{ item.namePost }} - {{ item.value }}
               </mat-chip>
             </mat-chip-list>
