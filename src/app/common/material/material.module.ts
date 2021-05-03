@@ -20,6 +20,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatChipsModule } from '@angular/material/chips';
 
 
 const materialComponents = [
@@ -43,6 +44,7 @@ const materialComponents = [
   MatSliderModule,
   MatDividerModule,
   MatPaginatorModule,
+  MatChipsModule
 ];
 
 @NgModule({

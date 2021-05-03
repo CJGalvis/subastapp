@@ -59,6 +59,7 @@ export class ProductsComponent implements OnInit {
         if (!filters) {
           this.elementsListView = this.elementsList;
         }
+        this.length = this.elementsListView.length;
       }
     )
   }
